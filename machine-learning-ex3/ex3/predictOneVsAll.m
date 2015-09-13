@@ -30,10 +30,16 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+disp(size(X));
+disp(size(all_theta));
 
 
-
-
+for i=1:m
+	tempx= X(i,:);
+	predictionis= tempx.*all_theta;
+	summation= sum(predictionis');
+	[ans1,ans2]=max(summation');
+	p(i)=ans2;
 
 
 % =========================================================================

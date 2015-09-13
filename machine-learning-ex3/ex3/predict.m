@@ -22,11 +22,22 @@ p = zeros(size(X, 1), 1);
 %
 
 
+disp(size(X));
+disp(size(Theta1));
+disp(size(Theta2));
 
-
-
-
-
+X=[ones(size(X,1),1) X];
+for i=1:m
+	
+	curX=X(i,:);
+	level1out=sum((curX.*Theta1),2);
+	level2in=sigmoid(level1out);
+	level2in=[1;level2in];
+	level2out=level2in'.*Theta2;
+	level3out=sigmoid(sum(level2out,2));
+	[val,index]=max(level3out);
+	p(i)=index;
+endfor
 
 
 % =========================================================================

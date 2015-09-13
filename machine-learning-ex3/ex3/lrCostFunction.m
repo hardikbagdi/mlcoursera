@@ -40,11 +40,16 @@ grad = zeros(size(theta));
 
 
 
+h = sigmoid(X * theta);
+theta1r = [0; theta(2:end)];
 
+costPositive = -y' * log(h);
+costNegative =  (1 - y') * log(1 - h);
+reg = (lambda / (2*m)) * (theta1r' * theta1r);
 
+J = (1/m) * (costPositive - costNegative) + reg;
 
-
-
+grad = (1/m) * (X' * (h - y)) + ((lambda / m) * theta1r);
 % =============================================================
 
 grad = grad(:);
