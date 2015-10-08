@@ -18,13 +18,15 @@ function [J grad] = nnCostFunction(nn_params, ...
 % for our 2 layer neural network
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
-
+%display(size(Theta1))
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
+%display(size(Theta2))
 
 % Setup some useful variables
 m = size(X, 1);
-         
+%display("nnCostFunction testing")
+ display(m) 
 % You need to return the following variables correctly 
 J = 0;
 Theta1_grad = zeros(size(Theta1));
@@ -38,7 +40,27 @@ Theta2_grad = zeros(size(Theta2));
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
-%
+exY= eye(num_labels)(y,:);
+
+
+a1= [ones(m,1),X];
+a2=sigmoid(Theta1*a1');
+%display("size of a2 after sigmoid:")
+%display(size(a2))
+a2=[ones(1,size(a2,2));a2];
+%display("size of a2")
+%display(size(a2));
+h=sigmoid(Theta2*a2);
+%display("size of h ");
+%display(size(h));
+term1 =  -exY.*log(h)';
+term2= (1-exY).*log(1-h)';
+summation = term1-term2;
+J = (1/m) * sum(summation(:));
+Theta1Filtered = Theta1(:,2:end);
+Theta2Filtered = Theta2(:,2:end);
+reg = (lambda / (2*m)) * (sumsq(Theta1Filtered(:)) + sumsq(Theta2Filtered(:)));
+J = J + reg;
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
 %         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
@@ -54,6 +76,28 @@ Theta2_grad = zeros(size(Theta2));
 %               over the training examples if you are implementing it for the 
 %               first time.
 %
+dd1=0;
+dd2=0;
+for t=1:m
+
+	a1=[1;X(t,:)'];
+	z2=Theta1*a1;
+	a2=sigmoid(z2);
+	a2=[1;a2];
+	z3=Theta2*a2;
+	a3=sigmoid(z3);
+	iterY=exY(t,:)';
+	d3=a3-iterY;
+	d2=(Theta2Filtered'*d3).*sigmoidGradient(z2);
+
+	dd2=dd2+(d3*a2');
+	dd1=dd1+(d2*a1');
+endfor
+
+Theta1_grad=(1/m)*dd1;
+Theta2_grad=(1/m)*dd2;
+
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
@@ -75,6 +119,8 @@ Theta2_grad = zeros(size(Theta2));
 
 
 
+Theta1_grad(:,2:end) = Theta1_grad(:,2:end) + ((lambda / m) * Theta1Filtered);
+Theta2_grad(:,2:end) = Theta2_grad(:,2:end) + ((lambda / m) * Theta2Filtered);
 
 
 
