@@ -17,10 +17,11 @@ sim = 0;
 %
 
 
+diff= x1-x2;
+sumsquared= sum(diff.*diff);
 
 
-
-
+sim= exp(-(sumsquared/(2*sigma*sigma)));
 % =============================================================
     
 end

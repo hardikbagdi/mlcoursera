@@ -49,7 +49,7 @@ email_contents = regexprep(email_contents, '[$]+', 'dollar');
 % ========================== Tokenize Email ===========================
 
 % Output the email to screen as well
-fprintf('\n==== Processed Email ====\n\n');
+fprintf('\n===1= Processed Email ====\n\n');
 
 % Process file
 l = 0;
@@ -99,10 +99,12 @@ while ~isempty(email_contents)
 
 
 
-
-
-
-
+for i= 1:length(vocabList)
+    %display(vocabList{i})
+    if strcmp(str,vocabList{i})
+        word_indices = [word_indices ; i];
+    endif
+endfor
 
 
 
