@@ -17,6 +17,7 @@
 %
 
 %% Initialization
+foo bar
 clear ; close all; clc
 
 %% Setup the parameters you will use for this part of the exercise
